@@ -1,0 +1,22 @@
+{
+	"name": "booking",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"eslint": "^5.9.0",
+		"eslint-config-basic": "git+ssh://git@github.com/anzerr/eslintrc.git"
+	},
+	"eslintConfig": {
+		"extends": "eslint-config-basic"
+	},
+	"dependencies": {
+		"request.libary": "git+ssh://git@github.com/Product-Live/request.libary.git"
+	}
+}
