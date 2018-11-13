@@ -27,11 +27,13 @@ class Main {
 	watch() {
 		this.test(['7070', '7487', '7488']).then((res) => {
 			util.log('value', [new Date().getTime(), res]);
+		}).catch((e) => {
+			console.log(e);
+			util.log('error', e.toString());
+		}).then(() => {
 			setTimeout(() => {
 				this.watch();
 			}, 30 * 1000);
-		}).catch((e) => {
-			util.log('error', e);
 		});
 	}
 
