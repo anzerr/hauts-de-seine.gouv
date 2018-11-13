@@ -8,7 +8,11 @@ class beFrench {
 	constructor() {
 		this.id = 4462;
 		this.host = 'http://www.hauts-de-seine.gouv.fr';
-		this.cookie = {};
+		this.cookie = {
+			xtvrn: '$488932$',
+			xtan488932: '-',
+			xtant488932: 1
+		};
 	}
 
 	request() {
@@ -40,10 +44,25 @@ class beFrench {
 			'Pragma': 'no-cache',
 			'Referer': 'http://www.hauts-de-seine.gouv.fr/booking/create/4462',
 			'Upgrade-Insecure-Requests': '1',
-			'Cookie': util.cookieFlat(this.cookie).Cookie,
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36',
 		};
+		let c = util.cookieFlat(this.cookie).Cookie;
+		if (c) {
+			base.Cookie = c;
+		}
 		return base;
+	}
+
+	session() {
+		return this.request()
+			.headers(this.headers())
+			.get('/booking/create/' + this.id + '/').then((res) => {
+				if (res.status() === 200) {
+					return this.updateCookie(res);
+				}
+				console.log(res.status(), res.body().toString(), res.headers());
+				throw new Error('wrong server response for step -1 "' + res.status() + '"');
+			});
 	}
 
 	accept() {
@@ -51,11 +70,14 @@ class beFrench {
 			.form({
 				condition: 'on',
 				nextButton: 'Effectuer une demande de rendez-vous'
-			}).post('/booking/create/' + this.id + '/0').then((res) => {
+			})
+			.headers(this.headers())
+			.post('/booking/create/' + this.id + '/0')
+			.then((res) => {
 				if (res.status() === 302) {
 					return this.updateCookie(res);
 				}
-				console.log(res.status(), res.body(), res.headers());
+				console.log(res.status(), res.body().toString(), res.headers());
 				throw new Error('wrong server response for step 0 "' + res.status() + '"');
 			});
 	}
@@ -72,7 +94,7 @@ class beFrench {
 					this.updateCookie(res);
 					return this.get();
 				}
-				console.log(res.status(), res.body(), res.headers());
+				console.log(res.status(), res.body().toString(), res.headers());
 				throw new Error('wrong server response for step 1 "' + res.status() + '"');
 			});
 	}
@@ -91,7 +113,7 @@ class beFrench {
 						has: has, hex: hex
 					};
 				}
-				console.log(res.status(), res.body(), res.headers());
+				console.log(res.status(), res.body().toString(), res.headers());
 				throw new Error('wrong server response for step 2 "' + res.status() + '"');
 			});
 	}
