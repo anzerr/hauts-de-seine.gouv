@@ -29,6 +29,23 @@ class beFrench {
 		return false;
 	}
 
+	headers() {
+		let base = {
+			'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+			'Accept-Language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
+			'Cache-Control': 'no-cache',
+			'Connection': 'keep-alive',
+			'Host': 'www.hauts-de-seine.gouv.fr',
+			'Origin': 'http://www.hauts-de-seine.gouv.fr',
+			'Pragma': 'no-cache',
+			'Referer': 'http://www.hauts-de-seine.gouv.fr/booking/create/4462',
+			'Upgrade-Insecure-Requests': '1',
+			'Cookie': util.cookieFlat(this.cookie).Cookie,
+			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36',
+		};
+		return base;
+	}
+
 	accept() {
 		return this.request()
 			.form({
@@ -38,7 +55,8 @@ class beFrench {
 				if (res.status() === 302) {
 					return this.updateCookie(res);
 				}
-				throw new Error('wrong server response');
+				console.log(res.status(), res.body(), res.headers());
+				throw new Error('wrong server response for step 0 "' + res.status() + '"');
 			});
 	}
 
@@ -48,19 +66,20 @@ class beFrench {
 				planning: id,
 				nextButton: 'Etape suivante'
 			})
-			.headers(util.cookieFlat(this.cookie))
+			.headers(this.headers())
 			.post('/booking/create/' + this.id + '/1').then((res) => {
 				if (res.status() === 302) {
 					this.updateCookie(res);
 					return this.get();
 				}
-				throw new Error('wrong server response');
+				console.log(res.status(), res.body(), res.headers());
+				throw new Error('wrong server response for step 1 "' + res.status() + '"');
 			});
 	}
 
 	get() {
 		return this.request()
-			.headers(util.cookieFlat(this.cookie))
+			.headers(this.headers())
 			.get('/booking/create/' + this.id + '/2').then((res) => {
 				if (res.isOkay()) {
 					let body = res.body().toString(),
@@ -72,7 +91,8 @@ class beFrench {
 						has: has, hex: hex
 					};
 				}
-				throw new Error('wrong server response');
+				console.log(res.status(), res.body(), res.headers());
+				throw new Error('wrong server response for step 2 "' + res.status() + '"');
 			});
 	}
 
