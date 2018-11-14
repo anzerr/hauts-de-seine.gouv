@@ -29,6 +29,14 @@ class Util {
 		process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
 	}
 
+	wait(t) {
+		return new Promise((resolve) => {
+			setTimeout(() => {
+				resolve();
+			}, t);
+		});
+	}
+
 	parseCookies(rc) {
 		let list = {};
 		if (Array.isArray(rc)) {

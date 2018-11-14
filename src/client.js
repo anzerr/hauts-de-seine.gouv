@@ -8,11 +8,7 @@ class beFrench {
 	constructor() {
 		this.id = 4462;
 		this.host = 'http://www.hauts-de-seine.gouv.fr';
-		this.cookie = {
-			xtvrn: '$488932$',
-			xtan488932: '-',
-			xtant488932: 1
-		};
+		this.cookie = {};
 	}
 
 	request() {
@@ -40,9 +36,7 @@ class beFrench {
 			'Cache-Control': 'no-cache',
 			'Connection': 'keep-alive',
 			'Host': 'www.hauts-de-seine.gouv.fr',
-			'Origin': 'http://www.hauts-de-seine.gouv.fr',
 			'Pragma': 'no-cache',
-			'Referer': 'http://www.hauts-de-seine.gouv.fr/booking/create/4462',
 			'Upgrade-Insecure-Requests': '1',
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36',
 		};
@@ -53,7 +47,7 @@ class beFrench {
 		return base;
 	}
 
-	session() {
+	setup() {
 		return this.request()
 			.headers(this.headers())
 			.get('/booking/create/' + this.id + '/').then((res) => {
@@ -61,7 +55,7 @@ class beFrench {
 					return this.updateCookie(res);
 				}
 				console.log(res.status(), res.body().toString(), res.headers());
-				throw new Error('wrong server response for step -1 "' + res.status() + '"');
+				throw new Error('wrong server response for step 0(setup) "' + res.status() + '"');
 			});
 	}
 
@@ -72,17 +66,33 @@ class beFrench {
 				nextButton: 'Effectuer une demande de rendez-vous'
 			})
 			.headers(this.headers())
+			.headers({Referer: 'http://www.hauts-de-seine.gouv.fr/booking/create/4462'})
 			.post('/booking/create/' + this.id + '/0')
 			.then((res) => {
 				if (res.status() === 302) {
 					return this.updateCookie(res);
 				}
 				console.log(res.status(), res.body().toString(), res.headers());
-				throw new Error('wrong server response for step 0 "' + res.status() + '"');
+				throw new Error('wrong server response for step 1(accept) "' + res.status() + '"');
 			});
 	}
 
-	has(id) {
+	options() {
+		return this.request()
+			.headers(this.headers())
+			.headers({Referer: 'http://www.hauts-de-seine.gouv.fr/booking/create/4462'})
+			.get('/booking/create/' + this.id + '/1')
+			.then((res) => {
+				if (res.status() === 200) {
+					return this.updateCookie(res);
+				}
+				console.log(res.status(), res.body().toString(), res.headers());
+				throw new Error('wrong server response for step 2(options) "' + res.status() + '"');
+			});
+	}
+
+
+	result(id) {
 		return this.request()
 			.form({
 				planning: id,
@@ -95,7 +105,7 @@ class beFrench {
 					return this.get();
 				}
 				console.log(res.status(), res.body().toString(), res.headers());
-				throw new Error('wrong server response for step 1 "' + res.status() + '"');
+				throw new Error('wrong server response for step 3(result) "' + res.status() + '"');
 			});
 	}
 
@@ -114,7 +124,7 @@ class beFrench {
 					};
 				}
 				console.log(res.status(), res.body().toString(), res.headers());
-				throw new Error('wrong server response for step 2 "' + res.status() + '"');
+				throw new Error('wrong server response for step 4(result load) "' + res.status() + '"');
 			});
 	}
 

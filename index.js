@@ -12,11 +12,19 @@ class Main {
 			((k) => {
 				const c = new Client();
 				p = p.then(() => {
-					return c.session();
+					return c.setup();
+				}).then(() => {
+					return util.wait(1000);
 				}).then(() => {
 					return c.accept();
 				}).then(() => {
-					return c.has(k);
+					return util.wait(1000);
+				}).then(() => {
+					return c.options();
+				}).then(() => {
+					return util.wait(1000);
+				}).then(() => {
+					return c.result(k);
 				}).then((res) => {
 					o.push([k, res]);
 					return o;
@@ -33,12 +41,12 @@ class Main {
 			util.log('value', [new Date().getTime(), res]);
 		}).catch((e) => {
 			console.log(e);
-			util.log('value', [new Date().getTime(), {}]);
+			util.log('value', [new Date().getTime(), [[key, {error: e.toString()}]]]);
 			util.log('error', e.toString());
 		}).then(() => {
 			setTimeout(() => {
 				this.watch(i + 1);
-			}, 10 * 1000);
+			}, 60 * 1000);
 		});
 	}
 
