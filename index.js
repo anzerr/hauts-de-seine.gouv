@@ -1,6 +1,8 @@
 
 const Client = require('./src/client.js'),
-	util = require('./src/util.js');
+	util = require('./src/util.js'),
+	fs = require('fs'),
+	{promisify} = require('util');
 
 class Main {
 
@@ -9,26 +11,18 @@ class Main {
 	test(key) {
 		let o = [], p = Promise.resolve();
 		for (let i in key) {
-			((k) => {
+			(async (k) => {
 				const c = new Client();
-				p = p.then(() => {
-					return c.setup();
-				}).then(() => {
-					return util.wait(1000);
-				}).then(() => {
-					return c.accept();
-				}).then(() => {
-					return util.wait(1000);
-				}).then(() => {
-					return c.options();
-				}).then(() => {
-					return util.wait(1000);
-				}).then(() => {
-					return c.result(k);
-				}).then((res) => {
-					o.push([k, res]);
-					return o;
-				});
+				await c.setup();
+				await util.wait(1000);
+				await c.accept();
+				await util.wait(1000);
+				await c.options();
+				await util.wait(1000);
+				let res = await c.result(k);
+				await promisify(fs.writeFile)('./data/' + res.hash, res.body);
+				o.push([k, res]);
+				return o;
 			})(key[i]);
 		}
 		return p;

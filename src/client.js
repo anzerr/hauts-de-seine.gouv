@@ -31,14 +31,14 @@ class beFrench {
 
 	headers() {
 		let base = {
-			'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-			'Accept-Language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
-			'Cache-Control': 'no-cache',
-			'Connection': 'keep-alive',
-			'Host': 'www.hauts-de-seine.gouv.fr',
-			'Pragma': 'no-cache',
-			'Upgrade-Insecure-Requests': '1',
-			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36',
+			// 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+			// 'Accept-Language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
+			// 'Cache-Control': 'no-cache',
+			// 'Connection': 'keep-alive',
+			// 'Host': 'www.hauts-de-seine.gouv.fr',
+			// 'Pragma': 'no-cache',
+			// 'Upgrade-Insecure-Requests': '1',
+			// 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36',
 		};
 		let c = util.cookieFlat(this.cookie).Cookie;
 		if (c) {
@@ -119,9 +119,7 @@ class beFrench {
 					const hash = crypto.createHash('sha256');
 					hash.update(body);
 					let hex = hash.digest('hex');
-					return {
-						has: has, hex: hex
-					};
+					return {body: body, has: has, hex: hex};
 				}
 				console.log(res.status(), res.body().toString(), res.headers());
 				throw new Error('wrong server response for step 4(result load) "' + res.status() + '"');
