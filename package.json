@@ -7,10 +7,10 @@
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"keywords": [],
-	"author": "",
-	"license": "ISC",
+	"author": "anzerr",
+	"license": "MIT",
 	"devDependencies": {
-		"eslint": "^5.9.0",
+		"eslint": "5.11.1",
 		"eslint-config-basic": "git+ssh://git@github.com/anzerr/eslintrc.git"
 	},
 	"eslintConfig": {
@@ -18,5 +18,17 @@
 	},
 	"dependencies": {
 		"request.libary": "git+ssh://git@github.com/Product-Live/request.libary.git"
-	}
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:anzerr/hauts-de-seine.gouv.git"
+	},
+	"engines": {
+		"node": ">= 0.10.0"
+	},
+	"types": "index.d.ts",
+	"bugs": {
+		"url": "https://github.com/anzerr/hauts-de-seine.gouv/issues"
+	},
+	"homepage": "https://github.com/anzerr/hauts-de-seine.gouv#readme"
 }
